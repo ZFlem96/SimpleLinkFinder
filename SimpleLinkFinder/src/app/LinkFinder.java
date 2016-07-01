@@ -16,19 +16,22 @@ import java.util.regex.Pattern;
 import org.junit.Test;
 
 public class LinkFinder {
-	Pattern w;
-	Matcher d;
-	public ArrayList<String> allLinks;
-	public ArrayList<String> linesInHTML;
-	public ArrayList<String> linksInHTML;
-	public ArrayList<String> linksinResults;
+	private Pattern w;
+	private Matcher d;
+	private String line = "";
+	public static ArrayList<String> allLinks = new ArrayList<String>();
+	public static ArrayList<String> linesInHTML = new ArrayList<String>();
+	public static ArrayList<String> linksInHTML = new ArrayList<String>();
+	public static ArrayList<String> linksinResults = new ArrayList<String>();
 	
 	public void processPage(InputStream in) throws IOException {
-		   System.out.println("In the method");
-		   String line;
+		
+		System.out.println("In the method");
+		int s = 1;
 		   InputStreamReader readThis = new InputStreamReader(in);
 		   BufferedReader read = new BufferedReader(readThis);
-		   try{
+		  try{ 
+		   
 			   while((line = read.readLine())!= null){
 				   System.out.println(line);
 				   linesInHTML.add(line);
@@ -48,7 +51,7 @@ public class LinkFinder {
 	 			txt+="\n"+txt1;
 	 			if(i != 0){
 	 				linksinResults = new ArrayList<String>();
-	 				linksinResults.add(txt);
+	 				linksinResults.add((i+1)+". "+txt);
 	 			}
 	 			txt1=read1.readLine();
 	 			i++;
@@ -56,37 +59,50 @@ public class LinkFinder {
 	 		}
 	 		System.out.println(linksinResults);
 	     }
-
+	
+	@Test
+ 	public void test() {
+ 		
+     }
+     public void finalLinkTest(String linkx ){
+    	 String patternx = "xx.*xx";
+ 		Pattern p = Pattern.compile(patternx);
+ 		Matcher m = p.matcher(linkx);
+ 		boolean matches = m.matches();
+ 		if(matches){
+ 			allLinks.add(linkx);
+ 		}
+     }
+     public void htmlLinksPattern(String lin){
+    	 String pattern = ".*[href].*([abcdesfghijklmnopqrstuvwxyz-/].*html).*";
+    	 Pattern p = Pattern.compile(pattern.toLowerCase());
+  		Matcher m = p.matcher(lin);
+  		boolean matches = m.matches();
+  		if(matches){
+  			linesInHTML.add(m.group(0));
+  		}
+     }
+	
 	     public Iterator<String> getLinks() throws FileNotFoundException,  IOException{
 	    	
-	    	Iterator<String> results = new Iterator<String>() {
-				
-				@Override
-				public String next() {
-					// TODO Auto-generated method stub
-					return null;
-				}
-				
-				@Override
-				public boolean hasNext() {
-					// TODO Auto-generated method stub
-					return false;
-				}
-			};
+//	    	Iterator<String> results = new Iterator<String>() {
+//				
+//				@Override
+//				public String next() {
+//					// TODO Auto-generated method stub
+//					return null;
+//				}
+//				
+//				@Override
+//				public boolean hasNext() {
+//					// TODO Auto-generated method stub
+//					return false;
+//				}
+//			};
 //	    			(Iterator<>)txt;
-	    	 return results;
+	    	 return null;
 	     }
-	     @Test
-	 	public void test() {
-	 		
-	     }
-	     public void patternTest(Pattern p, String patter ){
-	    	Matcher m = p.matcher(patter);
-	 		boolean matches = m.matches();
-	 		if(matches){
-	 			
-	 		}
-	     }
+	     
 	public static void main(String[] args) throws IOException {
 		LinkFinder a =new LinkFinder();
 //		 File f = new File("C:\\Users\\ZFleezy\\Documents\\Java1Assignments\\re");
@@ -123,5 +139,9 @@ public class LinkFinder {
 //            }
 //         }
 		a.processPage(site);
+		for(int i = 0; i<linesInHTML.size();i++){
+			a.htmlLinksPattern(linesInHTML.get(i));
+			System.out.println((i+1)+". "+linksInHTML.get(i));
+		}
 	}
 }
