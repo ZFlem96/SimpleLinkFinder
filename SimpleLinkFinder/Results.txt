@@ -62,6 +62,9 @@ studentlife.html
 results.html
 newsevents.html
 /nuservices/request_information.aspx
+application/index.html
+/chat.html
+http://neumont.edu/campustour/index.html
 tel:18886386668
 http://www.twitter.com/neumontU
 http://www.facebook.com/neumontuniversity
@@ -78,6 +81,7 @@ about-us/careers-at-Neumont.html
 http://gear.neumont.edu/
 academiccalendar/index.html
 consumerdisclosures.html
+/about-us/contact-us.html
 catalog.html
 about-us/documents.html
 neumontreviews.html
