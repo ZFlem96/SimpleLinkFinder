@@ -23,16 +23,16 @@ public class LinkFinder {
 	public static ArrayList<String> linksInHTML = new ArrayList<String>();
 	public static ArrayList<String> linksinResults = new ArrayList<String>();
 
-	public void processPage(InputStream in) throws IOException {
-		System.out.println("In the method");
-		int s = 1;
+	public void processPage(InputStream in, ArrayList<String> linesHTML) throws IOException {
+//		System.out.println("In the method");
+//		int s = 1;
 		InputStreamReader readThis = new InputStreamReader(in);
 		BufferedReader read = new BufferedReader(readThis);
 		try {
 
 			while ((line = read.readLine()) != null) {
 				// System.out.println(line);
-				linesInHTML.add(line);
+				linesHTML.add(line);
 			}
 		} catch (Exception e) {
 			System.out.println("Nothing to print");
@@ -41,33 +41,22 @@ public class LinkFinder {
 
 	}
 
-	// public boolean htmlLinksPattern(String lin) {
-	// Pattern p = Pattern.compile(pattern);
-	// Matcher m = p.matcher(lin);
-	// boolean matches = m.find();
-	// if (matches) {
-	// linksInHTML.add(m.group(1));
-	// return true;
-	// } else {
-	// return false;
-	// }
-	// }
-	public void htmlLinksPattern(String lin) {
+	public void htmlLinksPattern(String lin, ArrayList<String> linksResults, ArrayList<String> linksHTML) {
 		Pattern p = Pattern.compile(pattern);
 		Matcher m = p.matcher(lin);
 		boolean matches = m.find();
 		if (matches) {
 			int matched = 0;
-			for (int y = 0; y < linksinResults.size(); y++) {
+			for (int y = 0; y < linksResults.size(); y++) {
 				String inline = m.group(1);
-				if (inline.equals(linksinResults.get(y))) {
+				if (inline.equals(linksResults.get(y))) {
 					matched++;
 				}
 			}
 			if (matched > 0) {
-				linksInHTML.add(m.group(1));
+				linksHTML.add(m.group(1));
 			} else if (matched == 0) {
-				linksInHTML.add("No match: " + m.group(1));
+				linksHTML.add("No match: " + m.group(1));
 			}
 		}
 	}
@@ -81,23 +70,34 @@ public class LinkFinder {
 		InputStream site = null;
 		site = new FileInputStream("neumont.txt");
 		System.out.println("working");
-		a.processPage(site);
+		ArrayList<String> pageLines = a.linesInHTML;
+		ArrayList<String> htmlLinks = a.linksInHTML;
+		ArrayList<String> resultLinks = a.linksinResults;
 		FileReader file = new FileReader("results.txt");
 		BufferedReader read1 = new BufferedReader(file);
-		String txt = "";
 		String txt1 = read1.readLine();
-		int i = 0;
 		while (txt1 != null) {
-			txt = txt1;
-			// linksinResults.add((i + 1) + ". " + txt);
-			linksinResults.add(txt);
-
+			resultLinks.add(txt1);
 			txt1 = read1.readLine();
+		}
+		a.processPage(site, pageLines);
+//		a.processPage(site);
+//		FileReader file = new FileReader("results.txt");
+//		BufferedReader read1 = new BufferedReader(file);
+//		String txt = "";
+//		String txt1 = read1.readLine();
+//		int i = 0;
+//		while (txt1 != null) {
+//			txt = txt1;
+//			// linksinResults.add((i + 1) + ". " + txt);
+//			linksinResults.add(txt);
+//
+//			txt1 = read1.readLine();
 			// i++;
 
-		}
+//		}
 		for (int x = 0; x < linesInHTML.size(); x++) {
-			a.htmlLinksPattern(linesInHTML.get(x));
+			a.htmlLinksPattern(pageLines.get(x), resultLinks, htmlLinks);
 
 		}
 
